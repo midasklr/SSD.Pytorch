@@ -58,7 +58,7 @@ python eval.py --input 512 --trained_model weights/ssd512_VOC_28000.pth
 
 u can test single image using demo.py, just change a bit code in demo.py
 
-<img src="/home/kong/Documents/ssd.pytorch/resut.jpg" alt="[](./resut.jpg)" style="zoom: 67%;" />
+<img src="./image/resut.jpg" alt="[](./image/resut.jpg)" style="zoom: 67%;" />
 
 ## Results
 
