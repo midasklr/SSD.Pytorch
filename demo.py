@@ -24,12 +24,15 @@ if torch.cuda.is_available():
 from data import VOC_CLASSES as labels
 from ssd import build_ssd
 
-net = build_ssd('test', 300, 21)    # initialize SSD
-net.load_weights('./weights/ssd300_VOC_28000.pth')
+image_path = './test/example.jpg'
+weight_path = './weights/ssd300_VOC_2000.pth'
+model_input = 512
 
-image = cv2.imread('./test/example.jpg', cv2.IMREAD_COLOR)  # uncomment if dataset not downloaded
+net = build_ssd('test', model_input, 21)    # initialize SSD
+net.load_weights(weight_path)
+image = cv2.imread(image_path, cv2.IMREAD_COLOR)  # uncomment if dataset not downloaded
 rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-x = cv2.resize(image, (300, 300)).astype(np.float32)
+x = cv2.resize(image, (model_input, model_input)).astype(np.float32)
 x -= (104.0, 117.0, 123.0)
 x = x.astype(np.float32)
 x = x[:, :, ::-1].copy()
@@ -46,7 +49,7 @@ detections = y.data
 scale = torch.Tensor(rgb_image.shape[1::-1]).repeat(2)    #4个尺度的缩放系数
 for i in range(detections.size(1)):          #遍历num_class
     j = 0
-    while detections[0,i,j,0] >= 0.6:
+    while detections[0,i,j,0] >= 0.5:
         score = detections[0,i,j,0]
         label_name = labels[i-1]
         display_txt = '%s: %.2f'%(label_name, score)
@@ -54,5 +57,4 @@ for i in range(detections.size(1)):          #遍历num_class
         j+=1
         image = cv2.rectangle(image,(pt[0],pt[1]),(pt[2],pt[3]),(255,0,0),2)
         image = cv2.putText(image,display_txt,(pt[2],pt[1]),cv2.FONT_HERSHEY_COMPLEX,1,(255,0,0),2)
-
-cv2.imwrite('resut.jpg',image)
+cv2.imwrite('./test/resut.jpg',image)
