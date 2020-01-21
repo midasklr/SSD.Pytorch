@@ -70,3 +70,6 @@ u can test single image using demo.py, just change a bit code in demo.py
 | SSD512 | 79.8  | TD              |
 |        |       |                 |
 
+## Customer Dataset
+I trained a plate detector with ssd and work pretty well,though with a bit slow latency.
+![avatar](./result245.jpg)
