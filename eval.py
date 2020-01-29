@@ -36,7 +36,7 @@ def str2bool(v):
 parser = argparse.ArgumentParser(
     description='Single Shot MultiBox Detector Evaluation')
 parser.add_argument('--trained_model',
-                    default='weights/ssd300_VOC_28000.pth', type=str,
+                    default='/home/hwits/Documents/SSD.Pytorch/weights/ssd300_VOC_146000.pth', type=str,
                     help='Trained state_dict file path to open')
 parser.add_argument('--input',default=512, type=int, choices=[300, 512], help='ssd input size, currently support ssd300 and ssd512')
 parser.add_argument('--save_folder', default='eval/', type=str,

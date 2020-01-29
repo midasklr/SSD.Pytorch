@@ -1,0 +1,7 @@
+weights/*.pth
+venv/
+ssd300_120000/
+data/VOCdevkit/
+loss.pkl
+vgg16weights.py
+efficientnetb4_truncated.py

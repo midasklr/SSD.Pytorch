@@ -34,8 +34,11 @@ class Detect(Function):
         num = loc_data.size(0)  # batch size
         num_priors = prior_data.size(0)
         output = torch.zeros(num, self.num_classes, self.top_k, 5)
+        print('conf_data size:',conf_data.size())
+        conf_preds = conf_data.transpose(2,1)
         conf_preds = conf_data.view(num, num_priors,
                                     self.num_classes).transpose(2, 1)
+        print('conf_preds size:',conf_preds.size())
 
         # Decode predictions into bboxes.
         for i in range(num):

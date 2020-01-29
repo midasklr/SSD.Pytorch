@@ -24,8 +24,8 @@ if torch.cuda.is_available():
 from data import VOC_CLASSES as labels
 from ssd import build_ssd
 
-image_path = './test/example.jpg'
-weight_path = './weights/ssd300_VOC_2000.pth'
+image_path = './test/COCO_train2014_000000000659.jpg'
+weight_path = './weights/ssd300_VOC_146000.pth'
 model_input = 512
 
 net = build_ssd('test', model_input, 21)    # initialize SSD

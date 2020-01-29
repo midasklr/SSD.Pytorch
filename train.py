@@ -1,7 +1,7 @@
 from data import *
 from utils.augmentations import SSDAugmentation
 from layers.modules import MultiBoxLoss
-from ssd import build_ssd
+from ssd import build_ssd, build_ssd_efficientnet
 import os
 import sys
 import time
@@ -14,6 +14,8 @@ import torch.nn.init as init
 import torch.utils.data as data
 import numpy as np
 import argparse
+import pickle
+import math
 
 
 def str2bool(v):
@@ -23,16 +25,16 @@ def str2bool(v):
 parser = argparse.ArgumentParser(
     description='Single Shot MultiBox Detector Training With Pytorch')
 train_set = parser.add_mutually_exclusive_group()
-parser.add_argument('--input',default=512, type=int, choices=[300, 512], help='ssd input size, currently support ssd300 and ssd512')
+parser.add_argument('--input',default=300, type=int, choices=[300, 512], help='ssd input size, currently support ssd300 and ssd512')
 parser.add_argument('--dataset', default='VOC', choices=['VOC', 'COCO'],
                     type=str, help='VOC or COCO')
 parser.add_argument('--num_class', default=21, type=int, help='number of class in ur dataset')
 parser.add_argument('--dataset_root', default='./data/VOCdevkit',
                     help='Dataset root directory path')
-parser.add_argument('--basenet', default='vgg16_reducedfc.pth',
+parser.add_argument('--basenet', default='vgg16_reducedfc.pth', type=str, choices=['vgg16_reducedfc.pth', 'efficientnet_b4_truncated.pth'],
                     help='Pretrained base model')
-parser.add_argument('--num_epoch', default=200, type=int, help='number of epochs to train')
-parser.add_argument('--batch_size', default=4, type=int,
+parser.add_argument('--num_epoch', default=500, type=int, help='number of epochs to train')
+parser.add_argument('--batch_size', default=8, type=int,
                     help='Batch size for training')
 parser.add_argument('--resume', default=None, type=str,
                     help='Checkpoint state_dict file to resume training from')
@@ -42,7 +44,7 @@ parser.add_argument('--num_workers', default=4, type=int,
                     help='Number of workers used in dataloading')
 parser.add_argument('--cuda', default=True, type=str2bool,
                     help='Use CUDA to train model')
-parser.add_argument('--lr', '--learning-rate', default=1e-4, type=float,
+parser.add_argument('--lr', '--learning-rate', default=1e-3, type=float,
                     help='initial learning rate')
 parser.add_argument('--momentum', default=0.9, type=float,
                     help='Momentum value for optim')
@@ -94,8 +96,10 @@ def train():
     if args.visdom:
         import visdom
         viz = visdom.Visdom()
-
-    ssd_net = build_ssd('train', args.input, args.num_class)
+    if args.basenet == 'vgg16_reducedfc.pth':
+        ssd_net = build_ssd('train', args.input, args.num_class)
+    elif args.basenet == 'efficientnet_b4_truncated.pth':
+        ssd_net = build_ssd_efficientnet('train', args.input, args.num_class)
     net = ssd_net
 
     if args.cuda:
@@ -106,9 +110,15 @@ def train():
         print('Resuming training, loading {}...'.format(args.resume))
         ssd_net.load_weights(args.resume)
     else:
-        vgg_weights = torch.load(args.save_folder + args.basenet)
-        print('Loading base network...')
-        ssd_net.vgg.load_state_dict(vgg_weights)
+        if args.basenet == 'vgg16_reducedfc.pth':
+            vgg_weights = torch.load(args.save_folder + args.basenet)
+            print('Loading base network weights from %s\n'%(args.save_folder + args.basenet))
+            ssd_net.base.load_state_dict(vgg_weights)
+        elif args.basenet == 'efficientnet_b4_truncated.pth':
+            efficientnet_weights = torch.load(args.save_folder + args.basenet)
+            print('Loading base network weights from %s\n' % (args.save_folder + args.basenet))
+            print('ssd_net.base:',ssd_net.base)
+            ssd_net.base.load_state_dict(efficientnet_weights)
 
     if args.cuda:
         net = net.cuda()
@@ -116,11 +126,12 @@ def train():
     if not args.resume:
         print('Initializing weights...')
         # initialize newly added layers' weights with xavier method
+
         ssd_net.extras.apply(weights_init)
         ssd_net.loc.apply(weights_init)
         ssd_net.conf.apply(weights_init)
 
-    optimizer = optim.Adam(net.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = optim.AdamW(net.parameters(), lr=args.lr)
     criterion = MultiBoxLoss(args.num_class, 0.5, True, 0, True, 3, 0.5,
                              False, args.cuda)
 
@@ -129,16 +140,17 @@ def train():
     loc_loss = 0
     conf_loss = 0
     iteration = 1
+    loss_total = []
+    loss_loc = []
+    loss_cls = []
     print('Loading the dataset...')
 
-    epoch_size = len(dataset) // args.batch_size
+    epoch_size = math.ceil(len(dataset) / args.batch_size)
     print('iteration per epoch:',epoch_size)
     print('Training SSD on:', dataset.name)
     print('Using the specified args:')
     print(args)
-
     step_index = 0
-
     if args.visdom:
         vis_title = 'SSD.PyTorch on ' + dataset.name
         vis_legend = ['Loc Loss', 'Conf Loss', 'Total Loss']
@@ -152,7 +164,7 @@ def train():
     # create batch iterator
     # batch_iterator = iter(data_loader)
     for epoch in range(args.start_epoch, args.num_epoch):
-        print('\n------------------------------Epoch: {}-----------------------------------\n'.format(epoch))
+        print('\n'+'-'*70+'Epoch: {}'.format(epoch)+'-'*70+'\n')
         if args.visdom and epoch != 0 and (iteration % epoch_size == 0):
             update_vis_plot(epoch, loc_loss, conf_loss, epoch_plot, None,
                             'append', epoch_size)
@@ -161,14 +173,14 @@ def train():
             conf_loss = 0
             epoch += 1
         for images, targets in data_loader: # load train data
-            if iteration in cfg['SSD{}'.format(args.input)]['lr_steps']:
+            if epoch in cfg['SSD{}'.format(args.input)]['lr_steps']:
                 step_index += 1
                 adjust_learning_rate(optimizer, args.gamma, step_index)
 
-            if iteration % 100 == 0:
-                for param in optimizer.param_groups:
-                    if 'lr' in param.keys():
-                        print('Current lr:',param['lr'])
+            # if iteration % 100 == 0:
+            for param in optimizer.param_groups:
+                if 'lr' in param.keys():
+                    cur_lr = param['lr']
 
             if args.cuda:
                 images = Variable(images.cuda())
@@ -189,18 +201,23 @@ def train():
             loc_loss += loss_l.item()
             conf_loss += loss_c.item()
 
-            if iteration % 10 == 0:
-                print('timer: %.4f sec.' % (t1 - t0))
-                print('iter ' + repr(iteration) + ' || Loss: %.4f ||' % (loss.item()), end=' ')
+            if iteration % 50 == 0:
+                print('Epoch '+repr(epoch)+'|| iter ' + repr(iteration % epoch_size)+'/'+repr(epoch_size) +'|| Total iter '+repr(iteration)+ ' || Total Loss: %.4f || Loc Loss: %.4f || Cls Loss: %.4f || LR: %f || timer: %.4f sec.\n' % (loss.item(),loss_l.item(),loss_c.item(),cur_lr,(t1 - t0)), end=' ')
+                loss_cls.append(loss_c.item())
+                loss_loc.append(loss_l.item())
+                loss_total.append(loss.item())
+                loss_dic = {'loss':loss_total, 'loss_cls':loss_cls, 'loss_loc':loss_loc}
 
             if args.visdom:
                 update_vis_plot(iteration, loss_l.item(), loss_c.item(),
                                 iter_plot, epoch_plot, 'append')
 
-            if iteration != 0 and iteration % 2000 == 0:
+            if epoch != 0 and epoch % 5 == 0:
                 print('Saving state, iter:', iteration)
                 torch.save(ssd_net.state_dict(), 'weights/ssd{}_VOC_'.format(args.input) +
-                           repr(iteration) + '.pth')
+                           repr(epoch) + '.pth')
+                with open('loss.pkl', 'wb') as f:
+                    pickle.dump(loss_dic, f, pickle.HIGHEST_PROTOCOL)
             iteration += 1
     torch.save(ssd_net.state_dict(),
                args.save_folder + '' + args.dataset + '.pth')
@@ -213,6 +230,7 @@ def adjust_learning_rate(optimizer, gamma, step):
     # https://github.com/pytorch/examples/blob/master/imagenet/main.py
     """
     lr = args.lr * (gamma ** (step))
+    print('Now we change lr ...')
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
