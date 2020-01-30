@@ -266,8 +266,8 @@ class RandomSampleCrop(object):
                 overlap = jaccard_numpy(boxes, rect)
 
                 # is min and max overlap constraint satisfied? if not try again
-                # if overlap.min() < min_iou and max_iou < overlap.max():
-                if overlap.max() < min_iou:    #????right?
+                if overlap.min() < min_iou and max_iou < overlap.max():
+                # if overlap.max() < min_iou:    #????righ
                     continue
 
                 # cut the crop from the image

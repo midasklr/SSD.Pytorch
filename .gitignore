@@ -5,3 +5,5 @@ data/VOCdevkit/
 loss.pkl
 vgg16weights.py
 efficientnetb4_truncated.py
+vgg16weights.py
+result245.jpg

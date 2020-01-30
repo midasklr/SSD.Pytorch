@@ -24,9 +24,9 @@ if torch.cuda.is_available():
 from data import VOC_CLASSES as labels
 from ssd import build_ssd
 
-image_path = './test/COCO_train2014_000000000659.jpg'
-weight_path = './weights/ssd300_VOC_146000.pth'
-model_input = 512
+image_path = './test/example.jpg'
+weight_path = './weights/ssd300_VOC_100000.pth'
+model_input = 300
 
 net = build_ssd('test', model_input, 21)    # initialize SSD
 net.load_weights(weight_path)
@@ -49,7 +49,7 @@ detections = y.data
 scale = torch.Tensor(rgb_image.shape[1::-1]).repeat(2)    #4个尺度的缩放系数
 for i in range(detections.size(1)):          #遍历num_class
     j = 0
-    while detections[0,i,j,0] >= 0.5:
+    while detections[0,i,j,0] >= 0.2:
         score = detections[0,i,j,0]
         label_name = labels[i-1]
         display_txt = '%s: %.2f'%(label_name, score)

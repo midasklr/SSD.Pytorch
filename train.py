@@ -34,13 +34,13 @@ parser.add_argument('--dataset_root', default='./data/VOCdevkit',
 parser.add_argument('--basenet', default='vgg16_reducedfc.pth', type=str, choices=['vgg16_reducedfc.pth', 'efficientnet_b4_truncated.pth'],
                     help='Pretrained base model')
 parser.add_argument('--num_epoch', default=500, type=int, help='number of epochs to train')
-parser.add_argument('--batch_size', default=8, type=int,
+parser.add_argument('--batch_size', default=16, type=int,
                     help='Batch size for training')
 parser.add_argument('--resume', default=None, type=str,
                     help='Checkpoint state_dict file to resume training from')
 parser.add_argument('--start_epoch', default=0, type=int,
                     help='Resume training at this epoch')
-parser.add_argument('--num_workers', default=4, type=int,
+parser.add_argument('--num_workers', default=6, type=int,
                     help='Number of workers used in dataloading')
 parser.add_argument('--cuda', default=True, type=str2bool,
                     help='Use CUDA to train model')
@@ -172,16 +172,14 @@ def train():
             loc_loss = 0
             conf_loss = 0
             epoch += 1
+        if epoch in cfg['SSD{}'.format(args.input)]['lr_steps']:
+            step_index += 1
+            adjust_learning_rate(optimizer, args.gamma, step_index)
         for images, targets in data_loader: # load train data
-            if epoch in cfg['SSD{}'.format(args.input)]['lr_steps']:
-                step_index += 1
-                adjust_learning_rate(optimizer, args.gamma, step_index)
-
             # if iteration % 100 == 0:
             for param in optimizer.param_groups:
                 if 'lr' in param.keys():
                     cur_lr = param['lr']
-
             if args.cuda:
                 images = Variable(images.cuda())
                 targets = [Variable(ann.cuda()) for ann in targets]
@@ -212,10 +210,10 @@ def train():
                 update_vis_plot(iteration, loss_l.item(), loss_c.item(),
                                 iter_plot, epoch_plot, 'append')
 
-            if epoch != 0 and epoch % 5 == 0:
+            if iteration != 0 and iteration % 5000 == 0:
                 print('Saving state, iter:', iteration)
                 torch.save(ssd_net.state_dict(), 'weights/ssd{}_VOC_'.format(args.input) +
-                           repr(epoch) + '.pth')
+                           repr(iteration) + '.pth')
                 with open('loss.pkl', 'wb') as f:
                     pickle.dump(loss_dic, f, pickle.HIGHEST_PROTOCOL)
             iteration += 1
