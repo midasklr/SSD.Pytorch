@@ -66,8 +66,8 @@ u can test single image using demo.py, just change a bit code in demo.py
 
 | model  | paper | this implements |
 | ------ | ----- | --------------- |
-| SSD300 | 77.2  | 0.7605              |
-| SSD512 | 79.8  | TD              |
+| SSD300 | 77.2  | 0.7743              |
+| SSD512 | 79.8  | 0.7959            |
 |        |       |                 |
 
 
