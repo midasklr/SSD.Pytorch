@@ -67,31 +67,33 @@ u can test single image using demo.py, just change a bit code in demo.py
 | model  | paper | this implements |
 | ------ | ----- | --------------- |
 | SSD300 | 77.2  | 0.7743              |
-| SSD512 | 79.8  | 0.7959            |
+| SSD512 | 79.8  | 0.7980            |
 |        |       |                 |
 
 
-AP for aeroplane = 0.8058
-AP for bicycle = 0.8373
-AP for bird = 0.7512
-AP for boat = 0.6789
-AP for bottle = 0.4810
-AP for bus = 0.8293
-AP for car = 0.8522
-AP for cat = 0.8675
-AP for chair = 0.5911
-AP for cow = 0.8098
-AP for diningtable = 0.7380
-AP for dog = 0.8568
-AP for horse = 0.8536
-AP for motorbike = 0.8186
-AP for person = 0.7763
-AP for pottedplant = 0.4873
-AP for sheep = 0.7528
-AP for sofa = 0.7844
-AP for train = 0.8801
-AP for tvmonitor = 0.7570
-Mean AP = 0.7605
+VOC07 metric? Yes
+AP for aeroplane = 0.8861
+AP for bicycle = 0.8694
+AP for bird = 0.8078
+AP for boat = 0.7698
+AP for bottle = 0.6407
+AP for bus = 0.8625
+AP for car = 0.8825
+AP for cat = 0.8671
+AP for chair = 0.6424
+AP for cow = 0.8712
+AP for diningtable = 0.6781
+AP for dog = 0.8572
+AP for horse = 0.8781
+AP for motorbike = 0.8531
+AP for person = 0.8091
+AP for pottedplant = 0.5479
+AP for sheep = 0.8327
+AP for sofa = 0.7562
+AP for train = 0.8654
+AP for tvmonitor = 0.7824
+Mean AP = 0.7980
+
 
 
 ## Customer Dataset
