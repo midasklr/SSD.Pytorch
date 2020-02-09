@@ -92,12 +92,44 @@ u can test single image using demo.py, just change a bit code in demo.py
 
 | model  | paper | this implements |
 | ------ | ----- | --------------- |
+<<<<<<< HEAD
 | SSD300 | 77.2  | 77.43           |
 | SSD512 | 79.8  | 79.80           |
 
 ![](/home/hwits/Documents/SSD.Pytorch/img/map_epoch.png)
 
 ![](/home/hwits/Documents/SSD.Pytorch/img/loss.png)
+
+
+=======
+| SSD300 | 77.2  | 0.7743              |
+| SSD512 | 79.8  | 0.7980            |
+|        |       |                 |
+>>>>>>> 68a53bd2c59e48ad25436255d90707a542b5d370
+
+
+VOC07 metric? Yes
+AP for aeroplane = 0.8861
+AP for bicycle = 0.8694
+AP for bird = 0.8078
+AP for boat = 0.7698
+AP for bottle = 0.6407
+AP for bus = 0.8625
+AP for car = 0.8825
+AP for cat = 0.8671
+AP for chair = 0.6424
+AP for cow = 0.8712
+AP for diningtable = 0.6781
+AP for dog = 0.8572
+AP for horse = 0.8781
+AP for motorbike = 0.8531
+AP for person = 0.8091
+AP for pottedplant = 0.5479
+AP for sheep = 0.8327
+AP for sofa = 0.7562
+AP for train = 0.8654
+AP for tvmonitor = 0.7824
+Mean AP = 0.7980
 
 
 
