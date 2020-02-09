@@ -428,12 +428,12 @@ if __name__ == '__main__':
     print('Finished loading model!')
     # load data
     dataset = VOCDetection(args.voc_root, [('2007', set_type)],
-                           BaseTransform(300, dataset_mean),
+                           BaseTransform(args.input, dataset_mean),
                            VOCAnnotationTransform())
     if args.cuda:
         net = net.cuda()
         cudnn.benchmark = True
     # evaluation
     test_net(args.save_folder, net, args.cuda, dataset,
-             BaseTransform(net.size, dataset_mean), args.top_k, 300,
+             BaseTransform(net.size, dataset_mean), args.top_k, args.input,
              thresh=args.confidence_threshold)

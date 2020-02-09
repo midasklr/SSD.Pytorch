@@ -7,3 +7,12 @@ vgg16weights.py
 efficientnetb4_truncated.py
 vgg16weights.py
 result245.jpg
+demo/
+__pycache__/
+loss_visual.py
+map_visual.py
+result1k.txt
+weights/Final_M2Det_VOC_size320_netvgg16.pth
+weights/vgg16_reducedfc.pth
+weights/efficientnet_b4_truncated.pth
+weights/efficientnet-b4-6ed6700e.pth

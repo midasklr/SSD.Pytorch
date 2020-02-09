@@ -175,6 +175,8 @@ def train():
         if epoch in cfg['SSD{}'.format(args.input)]['lr_steps']:
             step_index += 1
             adjust_learning_rate(optimizer, args.gamma, step_index)
+        if epoch < 5:
+            warmup_learning_rate(optimizer,epoch)
         for images, targets in data_loader: # load train data
             # if iteration % 100 == 0:
             for param in optimizer.param_groups:
@@ -232,6 +234,11 @@ def adjust_learning_rate(optimizer, gamma, step):
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
+def warmup_learning_rate(optimizer,epoch):
+    lr_ini = 0.0001
+    print('lr warmup...')
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr_ini+(args.lr - lr_ini)*epoch/5
 
 def xavier(param):
     init.xavier_uniform_(param)

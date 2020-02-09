@@ -51,14 +51,40 @@ CUDA_VISIBLE_DEVICES=0 python train.py --input 512 --dataset_root ./data/VOCdevk
 use the eval.py to eval ur model:
 
 ```
-python eval.py --input 512 --trained_model weights/ssd512_VOC_28000.pth
+python eval.py --input 512 --trained_model weights/ssd512_VOC_73000_mAP79.80.pth
 ```
+
+and you will get results as follows:
+
+AP for aeroplane = 0.8861
+AP for bicycle = 0.8694
+AP for bird = 0.8078
+AP for boat = 0.7698
+AP for bottle = 0.6407
+AP for bus = 0.8625
+AP for car = 0.8825
+AP for cat = 0.8671
+AP for chair = 0.6424
+AP for cow = 0.8712
+AP for diningtable = 0.6781
+AP for dog = 0.8572
+AP for horse = 0.8781
+AP for motorbike = 0.8531
+AP for person = 0.8091
+AP for pottedplant = 0.5479
+AP for sheep = 0.8327
+AP for sofa = 0.7562
+AP for train = 0.8654
+AP for tvmonitor = 0.7824
+Mean AP = 0.7980
 
 ## Demo
 
 u can test single image using demo.py, just change a bit code in demo.py
 
-<img src="./test/resut.jpg" alt="[](./test/resut.jpg)" style="zoom: 67%;" />
+<img src="./img/resut.jpg" alt="[](./test/resut.jpg)" style="zoom:150%;" />
+
+
 
 ## Results
 
@@ -66,10 +92,16 @@ u can test single image using demo.py, just change a bit code in demo.py
 
 | model  | paper | this implements |
 | ------ | ----- | --------------- |
-| SSD300 | 77.2  | TD              |
-| SSD512 | 79.8  | TD              |
-|        |       |                 |
+| SSD300 | 77.2  | 77.43           |
+| SSD512 | 79.8  | 79.80           |
+
+![](/home/hwits/Documents/SSD.Pytorch/img/map_epoch.png)
+
+![](/home/hwits/Documents/SSD.Pytorch/img/loss.png)
+
+
 
 ## Customer Dataset
+
 I trained a plate detector with ssd and work pretty well,though with a bit slow latency.
-![avatar](./result245.jpg)
+![avatar](./img/SSDplate.jpeg)
