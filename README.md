@@ -82,7 +82,7 @@ Mean AP = 0.7980
 
 u can test single image using demo.py, just change a bit code in demo.py
 
-<img src="./img/resut.jpg" alt="[](./test/resut.jpg)" style="zoom:150%;" />
+<img src="./img/resut.jpg" alt="[](./img/resut.jpg)" style="zoom:150%;" />
 
 
 
@@ -95,16 +95,22 @@ u can test single image using demo.py, just change a bit code in demo.py
 | SSD300 | 77.2  | 77.43           |
 | SSD512 | 79.8  | 79.80           |
 
+<<<<<<< HEAD
 ![](./img/map_epoch.png)
 
 ![](./img/loss.png)
+=======
+<img src="./img/map_epoch.png" alt="[](./img/map_epoch.png)" style="zoom:150%;" />
+>>>>>>> 6e72bdf61e1709beafec9468c77dc254e221adfe
 
+<img src="./img/loss.png" alt="[](./img/loss.png)" style="zoom:150%;" />
 
 
 ## Train with Customer Dataset
 
 I trained a plate detector with ssd and work pretty well,though with a bit slow latency.
 ![avatar](./img/SSDplate.jpeg)
+<<<<<<< HEAD
 
 
 
@@ -178,3 +184,5 @@ run :
 CUDA_VISIBLE_DEVICES=0 python train.py --input 512 --dataset_root ./data/VOCdevkit --num_class ${your dataset class} --num_epoch 300 --lr 0.001 --batch_size 16
 ```
 
+=======
+>>>>>>> 6e72bdf61e1709beafec9468c77dc254e221adfe
