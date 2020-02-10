@@ -110,42 +110,16 @@ u can test single image using demo.py, just change a bit code in demo.py
 
 I trained a plate detector with ssd and work pretty well,though with a bit slow latency.
 ![avatar](./img/SSDplate.jpeg)
-<<<<<<< HEAD
-
-
 
 To train your own dataset：
 
-1）make your dataset as VOC format and put it in ./data/  folder. the dataset path could be arrange as follows:
+**1）make your dataset as VOC format and put it in ./data/  folder. the dataset path could be arrange as** follows:
 
-.
-├── data
-│   ├── coco_labels.txt
-│   ├── coco.py
-│   ├── config.py
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── coco.cpython-37.pyc
-│   │   ├── config.cpython-37.pyc
-│   │   ├── __init__.cpython-37.pyc
-│   │   └── voc0712.cpython-37.pyc
-│   ├── scripts
-│   │   ├── COCO2014.sh
-│   │   ├── VOC2007.sh
-│   │   └── VOC2012.sh
-│   ├── vgg_truncated.txt
-│   ├── voc0712.py
-│   └── VOCdevkit
-│       ├── VOC2007
-│       │   ├── Annotations
-│       │   ├── ImageSets
-│       │   ├── JPEGImages
-
-
+![tree](./img/Screenshot from 2020-02-10 12-46-07.png)
 
 JPEGImages folder is all your dataset,Annotations is all your xml labels, just follow voc format.
 
-2) change the dataset parser code ./data/voc0712.py:
+**2) change the dataset parser code ./data/voc0712.py:**
 
 change :
 
@@ -166,7 +140,7 @@ to:
 image_sets=[('2007', 'trainval')]
 ```
 
-3) 
+**3)  train with vgg pretrained weights**
 
 Download the fc-reduced [VGG-16](https://arxiv.org/abs/1409.1556) PyTorch base network weights at: https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth
 
@@ -184,5 +158,3 @@ run :
 CUDA_VISIBLE_DEVICES=0 python train.py --input 512 --dataset_root ./data/VOCdevkit --num_class ${your dataset class} --num_epoch 300 --lr 0.001 --batch_size 16
 ```
 
-=======
->>>>>>> 6e72bdf61e1709beafec9468c77dc254e221adfe
