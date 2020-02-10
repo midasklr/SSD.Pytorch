@@ -95,9 +95,9 @@ u can test single image using demo.py, just change a bit code in demo.py
 | SSD300 | 77.2  | 77.43           |
 | SSD512 | 79.8  | 79.80           |
 
-![](/home/hwits/Documents/SSD.Pytorch/img/map_epoch.png)
+![](./img/map_epoch.png)
 
-![](/home/hwits/Documents/SSD.Pytorch/img/loss.png)
+![](./img/loss.png)
 
 
 
