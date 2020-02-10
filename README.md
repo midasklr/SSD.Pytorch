@@ -82,7 +82,7 @@ Mean AP = 0.7980
 
 u can test single image using demo.py, just change a bit code in demo.py
 
-<img src="./img/resut.jpg" alt="[](./test/resut.jpg)" style="zoom:150%;" />
+<img src="./img/resut.jpg" alt="[](./img/resut.jpg)" style="zoom:150%;" />
 
 
 
@@ -95,10 +95,9 @@ u can test single image using demo.py, just change a bit code in demo.py
 | SSD300 | 77.2  | 77.43           |
 | SSD512 | 79.8  | 79.80           |
 
-![](./img/map_epoch.png)
+<img src="./img/map_epoch.png" alt="[](./img/map_epoch.png)" style="zoom:150%;" />
 
-![](./img/loss.png)
-
+<img src="./img/loss.png" alt="[](./img/loss.png)" style="zoom:150%;" />
 
 
 ## Customer Dataset
