@@ -33,7 +33,7 @@ parser.add_argument('--dataset_root', default='./data/VOCdevkit',
                     help='Dataset root directory path')
 parser.add_argument('--basenet', default='vgg16_reducedfc.pth', type=str, choices=['vgg16_reducedfc.pth', 'efficientnet_b4_truncated.pth'],
                     help='Pretrained base model')
-parser.add_argument('--num_epoch', default=500, type=int, help='number of epochs to train')
+parser.add_argument('--num_epoch', default=300, type=int, help='number of epochs to train')
 parser.add_argument('--batch_size', default=16, type=int,
                     help='Batch size for training')
 parser.add_argument('--resume', default=None, type=str,
@@ -175,7 +175,7 @@ def train():
         if epoch in cfg['SSD{}'.format(args.input)]['lr_steps']:
             step_index += 1
             adjust_learning_rate(optimizer, args.gamma, step_index)
-        if epoch < 5:
+        if epoch <= 5:
             warmup_learning_rate(optimizer,epoch)
         for images, targets in data_loader: # load train data
             # if iteration % 100 == 0:
@@ -201,7 +201,7 @@ def train():
             loc_loss += loss_l.item()
             conf_loss += loss_c.item()
 
-            if iteration % 50 == 0:
+            if iteration % 10 == 0:
                 print('Epoch '+repr(epoch)+'|| iter ' + repr(iteration % epoch_size)+'/'+repr(epoch_size) +'|| Total iter '+repr(iteration)+ ' || Total Loss: %.4f || Loc Loss: %.4f || Cls Loss: %.4f || LR: %f || timer: %.4f sec.\n' % (loss.item(),loss_l.item(),loss_c.item(),cur_lr,(t1 - t0)), end=' ')
                 loss_cls.append(loss_c.item())
                 loss_loc.append(loss_l.item())

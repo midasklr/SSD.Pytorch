@@ -115,9 +115,11 @@ To train your own dataset：
 
 **1）make your dataset as VOC format and put it in ./data/  folder. the dataset path could be arrange as** follows:
 
-![tree](./img/Screenshot from 2020-02-10 12-46-07.png)
+![image-20200215220618684](img/image-20200215220618684.png)
 
-JPEGImages folder is all your dataset,Annotations is all your xml labels, just follow voc format.
+
+
+JPEGImages folder is all your dataset,Annotations is all your xml labels, and create your own trainval.txt and test.txt under ImageSets/Main , just follow voc format. Above is my own dataset CityDet.
 
 **2) change the dataset parser code ./data/voc0712.py:**
 
@@ -126,6 +128,18 @@ change :
 ```python
 VOC_CLASSES = (  # always index 0
     ur dataset class)
+```
+
+change:
+
+```python
+VOC_ROOT = osp.join('./', "data/VOCdevkit/")
+```
+
+to your own dataset dir:
+
+```python
+VOC_ROOT = osp.join('./', "data/CityDet/")
 ```
 
 change:
@@ -155,6 +169,15 @@ wget https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth
 run :
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 python train.py --input 512 --dataset_root ./data/VOCdevkit --num_class ${your dataset class} --num_epoch 300 --lr 0.001 --batch_size 16
+CUDA_VISIBLE_DEVICES=0 python train.py --input 512 --dataset_root ${your dataset dir} --num_class ${your dataset class} --num_epoch 300 --lr 0.001 --batch_size 16
 ```
 
+for  my CityDet dataset:
+
+```shell
+CUDA_VISIBLE_DEVICES=0 python train.py --input 512 --dataset_root ./data/CityDet/ --num_class 22 --num_epoch 300 --lr 0.001 --batch_size 16
+```
+
+and you will get start to train your own SSD detector:
+
+![](./img/Screenshot from 2020-02-15 20-09-16.png)
