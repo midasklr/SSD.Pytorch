@@ -95,13 +95,13 @@ u can test single image using demo.py, just change a bit code in demo.py
 | SSD300 | 77.2  | 77.43           |
 | SSD512 | 79.8  | 79.80           |
 
-<<<<<<< HEAD
+SSD300 and SSD512 model weights trained with VOC:https://pan.baidu.com/s/1DxlkOQzkFkkdYdNYsDx_MQ code:dd7m
 ![](./img/map_epoch.png)
 
 ![](./img/loss.png)
 =======
 <img src="./img/map_epoch.png" alt="[](./img/map_epoch.png)" style="zoom:150%;" />
->>>>>>> 6e72bdf61e1709beafec9468c77dc254e221adfe
+
 
 <img src="./img/loss.png" alt="[](./img/loss.png)" style="zoom:150%;" />
 
