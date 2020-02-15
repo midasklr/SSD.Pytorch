@@ -99,11 +99,6 @@ SSD300 and SSD512 model weights trained with VOC:https://pan.baidu.com/s/1DxlkOQ
 ![](./img/map_epoch.png)
 
 ![](./img/loss.png)
-=======
-<img src="./img/map_epoch.png" alt="[](./img/map_epoch.png)" style="zoom:150%;" />
-
-
-<img src="./img/loss.png" alt="[](./img/loss.png)" style="zoom:150%;" />
 
 
 ## Train with Customer Dataset
@@ -180,4 +175,4 @@ CUDA_VISIBLE_DEVICES=0 python train.py --input 512 --dataset_root ./data/CityDet
 
 and you will get start to train your own SSD detector:
 
-![](./img/Screenshot from 2020-02-15 20-09-16.png)
+![sR](./img/Screenshot%20from%202020-02-15%2020-09-16.png)
